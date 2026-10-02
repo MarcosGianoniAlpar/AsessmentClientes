@@ -45,7 +45,7 @@ const etapas = {
       /gh[pousr]_[A-Za-z0-9]{36}/,
       /sk-[A-Za-z0-9_-]{20,}/,
       /xox[baprs]-[A-Za-z0-9-]{10,}/,
-      /^[ \t]*(SN_PASSWORD|SN_USER|PASSWORD|TOKEN|SECRET)[ \t]*=[ \t]*\S+/m,
+      /^[ \t]*(SN_PASSWORD|SN_USER|PASSWORD|TOKEN|SECRET)[A-Z0-9_]*[ \t]*=[ \t]*\S+/m,
     ];
     return arquivos(root)
       .filter((f) => padroes.some((p) => p.test(readFileSync(f, 'utf8'))))

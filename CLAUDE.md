@@ -7,7 +7,7 @@ Aqui não se desenvolve nada na plataforma: só se lê, analisa e documenta.
 ## Regras
 
 1. **Somente leitura no ServiceNow.** Consultas à instância só via GET (Table API, Aggregate API, exports). Nunca POST, PUT, PATCH ou DELETE. Nunca rodar background script, nunca commitar update set. O hook `block-sn-write.sh` bloqueia escrita via curl.
-2. **Segredos no Infisical, uma pasta por cliente.** Credenciais de instância nascem no cofre, em `/<cliente>`, e chegam como variável de ambiente (`infisical run --path=/<cliente> -- claude`). Uma sessão trabalha com um cliente por vez. Nunca escrever usuário, senha ou token em arquivo. O hook `block-secrets.sh` bloqueia.
+2. **Segredos no Infisical, uma pasta única para todos os clientes.** Credenciais de instância nascem no cofre e chegam como variável de ambiente (`infisical run -- claude`). Cada cliente tem suas variáveis com sufixo: `SN_INSTANCE_URL_<CLIENTE>`, `SN_USER_<CLIENTE>`, `SN_PASSWORD_<CLIENTE>`, onde `<CLIENTE>` é o slug em maiúsculas com `_` no lugar de `-` (`banco-xyz` vira `BANCO_XYZ`). Ao trabalhar num cliente, usar só as variáveis com o sufixo dele. Nunca escrever usuário, senha ou token em arquivo. O hook `block-secrets.sh` bloqueia.
 3. **Dados brutos não vão para o Git.** Exports da instância (xlsx, csv, xml, json) ficam em `assessments/<cliente>/brutos/`, que está no `.gitignore`. No repositório entra só a análise.
 4. **Sem dado pessoal nos achados.** Usar sys_id, contagens ou nomes de grupo. Nunca nome, e-mail ou telefone de usuário final.
 5. **Todo achado tem evidência.** Tabela, filtro (encoded query), contagem ou print. Achado sem evidência não entra.
@@ -28,7 +28,7 @@ Aqui não se desenvolve nada na plataforma: só se lê, analisa e documenta.
 ## Rotina de cada entrega
 
 1. Criar branch `claude/<cliente>-<entrega>`.
-2. Cliente novo: copiar o template para `assessments/<cliente>/assessment.md`, criar a pasta `/<cliente>` no Infisical e registrar no índice `assessments/README.md`.
+2. Cliente novo: copiar o template para `assessments/<cliente>/assessment.md`, cadastrar as três variáveis com sufixo do cliente no Infisical e registrar no índice `assessments/README.md`.
 3. Coletar evidências (somente leitura) e registrar achados.
 4. `npm run verify` até ficar verde.
 5. Chamar o subagente `revisor` para revisar o diff.

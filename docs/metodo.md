@@ -1,6 +1,6 @@
 # Método de análise
 
-0. **Cliente novo:** slug, pasta `assessments/<cliente>/`, pasta `/<cliente>` no Infisical, linha no índice `assessments/README.md`.
+0. **Cliente novo:** slug, pasta `assessments/<cliente>/`, variáveis `SN_*_<CLIENTE>` no Infisical, linha no índice `assessments/README.md`.
 1. **Kickoff:** escopo, instâncias, acesso somente leitura (papel `snc_read_only` ou equivalente).
 2. **Coleta:** Table API e Aggregate API via GET, exports de listas. Brutos em `assessments/<cliente>/brutos/` (fora do Git).
 3. **Análise:** por área, usando as skills ServiceNow para classificar cada achado no componente certo.
