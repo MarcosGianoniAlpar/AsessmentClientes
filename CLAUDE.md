@@ -2,22 +2,25 @@
 
 Repositório de **análises (assessments) de instâncias ServiceNow de clientes** da Alpar.
 Aqui não se desenvolve nada na plataforma: só se lê, analisa e documenta.
+**Vários clientes convivem neste repositório**, cada um isolado na sua pasta.
 
 ## Regras
 
 1. **Somente leitura no ServiceNow.** Consultas à instância só via GET (Table API, Aggregate API, exports). Nunca POST, PUT, PATCH ou DELETE. Nunca rodar background script, nunca commitar update set. O hook `block-sn-write.sh` bloqueia escrita via curl.
-2. **Segredos no Infisical.** Credenciais de instância nascem no cofre e chegam como variável de ambiente (`infisical run -- claude`). Nunca escrever usuário, senha ou token em arquivo. O hook `block-secrets.sh` bloqueia.
+2. **Segredos no Infisical, uma pasta por cliente.** Credenciais de instância nascem no cofre, em `/<cliente>`, e chegam como variável de ambiente (`infisical run --path=/<cliente> -- claude`). Uma sessão trabalha com um cliente por vez. Nunca escrever usuário, senha ou token em arquivo. O hook `block-secrets.sh` bloqueia.
 3. **Dados brutos não vão para o Git.** Exports da instância (xlsx, csv, xml, json) ficam em `assessments/<cliente>/brutos/`, que está no `.gitignore`. No repositório entra só a análise.
 4. **Sem dado pessoal nos achados.** Usar sys_id, contagens ou nomes de grupo. Nunca nome, e-mail ou telefone de usuário final.
 5. **Todo achado tem evidência.** Tabela, filtro (encoded query), contagem ou print. Achado sem evidência não entra.
 6. **PR pequeno.** Uma entrega por branch `claude/<entrega>`. Nunca commit na main.
 7. **Verify verde antes do PR.** `npm run verify`.
 8. **Sem travessão** no meio de frases. Usar vírgula, dois pontos ou ponto.
-9. **Português do Brasil** nos documentos; termos do ServiceNow ficam no original (Business Rule, Update Set, RITM).
+9. **Isolamento entre clientes.** Nunca citar, comparar ou copiar dado, nome ou achado de um cliente no documento de outro. Comparações só de forma anônima e agregada, em `docs/`.
+10. **Português do Brasil** nos documentos; termos do ServiceNow ficam no original (Business Rule, Update Set, RITM).
 
 ## Estrutura
 
-- `assessments/<cliente>/`: uma pasta por cliente, partindo de `templates/assessment.md`.
+- `assessments/README.md`: índice de clientes (slug, status, última entrega).
+- `assessments/<cliente>/`: uma pasta por cliente, com `assessment.md` (partindo de `templates/assessment.md`) e `brutos/` fora do Git. Slug do cliente em minúsculas com hífen (ex.: `banco-xyz`).
 - `templates/`: modelos de assessment e de achado.
 - `docs/`: método, escala de severidade e decisões (`docs/decisoes/`).
 - `scripts/`: utilitários (verify, extrações somente leitura).
@@ -25,11 +28,11 @@ Aqui não se desenvolve nada na plataforma: só se lê, analisa e documenta.
 ## Rotina de cada entrega
 
 1. Criar branch `claude/<cliente>-<entrega>`.
-2. Copiar o template para `assessments/<cliente>/` (se for cliente novo).
+2. Cliente novo: copiar o template para `assessments/<cliente>/assessment.md`, criar a pasta `/<cliente>` no Infisical e registrar no índice `assessments/README.md`.
 3. Coletar evidências (somente leitura) e registrar achados.
 4. `npm run verify` até ficar verde.
 5. Chamar o subagente `revisor` para revisar o diff.
-6. Abrir o PR e atualizar o `HANDOFF.md`.
+6. Abrir o PR e atualizar o `HANDOFF.md` na seção do cliente.
 7. Registrar no `DEBT.md` o que ficou para depois.
 
 ## Skills úteis

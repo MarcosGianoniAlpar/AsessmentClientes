@@ -1,17 +1,17 @@
 # Handoff
 
-Continuidade entre sessões. Atualizar ao fim de cada entrega.
+Continuidade entre sessões. Uma seção por cliente; atualizar ao fim de cada entrega.
 
-## Estado atual
+## Geral
 
-- Ambiente preparado a partir do harness simplificado, adaptado para análises ServiceNow (sem código de aplicação).
-- Nenhum cliente cadastrado ainda em `assessments/`.
+- Ambiente preparado a partir do harness simplificado, adaptado para análises ServiceNow com vários clientes.
+- Próximo passo: definir o primeiro cliente e o escopo.
 
-## Próximo passo
+<!-- Modelo de seção por cliente:
 
-- Definir o primeiro cliente e o escopo do assessment.
-- Criar o projeto no Infisical (dev, staging, prod) e cadastrar as credenciais somente leitura da instância (`SN_INSTANCE_URL`, `SN_USER`, `SN_PASSWORD`).
+## <cliente>
 
-## Bloqueios
-
-- Nenhum.
+- **Estado atual:**
+- **Próximo passo:**
+- **Bloqueios:**
+-->

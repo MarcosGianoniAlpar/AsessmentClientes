@@ -17,8 +17,18 @@ function arquivos(dir) {
 
 const etapas = {
   estrutura() {
-    const obrigatorios = ['CLAUDE.md', 'HANDOFF.md', 'DEBT.md', 'env.example', 'templates/assessment.md', '.claude/settings.json'];
-    return obrigatorios.filter((f) => !existsSync(join(root, f))).map((f) => `faltando: ${f}`);
+    const obrigatorios = ['CLAUDE.md', 'HANDOFF.md', 'DEBT.md', 'env.example', 'templates/assessment.md', '.claude/settings.json', 'assessments/README.md'];
+    const faltando = obrigatorios.filter((f) => !existsSync(join(root, f))).map((f) => `faltando: ${f}`);
+    // Cada cliente: slug válido, assessment.md presente e registrado no índice.
+    const dir = join(root, 'assessments');
+    const indice = readFileSync(join(dir, 'README.md'), 'utf8');
+    const clientes = readdirSync(dir).filter((n) => statSync(join(dir, n)).isDirectory());
+    for (const c of clientes) {
+      if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(c)) faltando.push(`slug inválido: assessments/${c}`);
+      if (!existsSync(join(dir, c, 'assessment.md'))) faltando.push(`faltando: assessments/${c}/assessment.md`);
+      if (!indice.includes(`| ${c} |`)) faltando.push(`cliente fora do índice: ${c}`);
+    }
+    return faltando;
   },
   estilo() {
     const travessao = '—';
