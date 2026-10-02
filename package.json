@@ -1,0 +1,8 @@
+{
+  "name": "asessment-clientes",
+  "private": true,
+  "description": "Assessments de instâncias ServiceNow de clientes Alpar",
+  "scripts": {
+    "verify": "node scripts/verify.mjs"
+  }
+}
